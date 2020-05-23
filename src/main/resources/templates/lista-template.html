@@ -2,14 +2,22 @@
 <html layout:decorate="~{modelo}">
 <head>
 <meta charset="UTF-8">
+<style>
+	 #Ativado{
+	 color: green;
+	 font-weight: bold;
+	 }
+	 
+	 #Desativado{
+	  color: red;
+	  font-weight: bold;
+	 }
+</style>
 </head>
 <body>
 	<div layout:fragment="conteudo">
 		<h2>Gerenciador de Usuários</h2>
-		<div class="alert alert-danger" role="alert"
-			th:if="${msgErro != null}" th:text="${msgErro}"></div>
-			<div class="alert alert-success" role="alert"
-			th:if="${mensagem != null}" th:text="${mensagem}"></div>
+			<div class="alert alert-success" role="alert" th:if="${mensagem != null}" th:text="${mensagem}"></div>
 		<table class="table table-striped">
 			<thead class="thead-dark">
 				<tr>
@@ -23,7 +31,7 @@
 				<tr th:each="item, stat : ${itens}">
 					<td th:text="${stat.count}"></td>
 					<td th:text="${item.nome}">Nome nome nome</td>
-					<td th:text="${item.status}">Status Status</td>
+					<td th:id="${item.status}" th:text="${item.status}">Status Status</td>
 					<td><a href="#" class="btn btn-primary"
 						th:href="@{/usuario/editar/{id}(id=${item.id})}">Editar</a> <a
 						href="#modalDelete" data-toggle="modal" class="btn btn-danger"
@@ -32,8 +40,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<a href="#" class="btn btn-success" th:href="@{/usuario/novo}">Incluir
-			Novo</a>
+		<a href="#" class="btn btn-success" th:href="@{/usuario/novo}">Incluir Novo</a>
 		<div id="modalDelete" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">

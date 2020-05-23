@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -59,32 +61,36 @@ public class UsuarioController {
 
 		} else {
 			ModelAndView modelAndView = new ModelAndView("lista-template");
-			modelAndView.addObject("msgErro", "Contato não encontrado");
 			return modelAndView;
 		}
 	}
 
 	@PostMapping("/salvar")
-	public String salvar(@ModelAttribute("item") Usuario usuarioEnviado, BindingResult bindingResult,
-			RedirectAttributes rediAttr) {
+	public ModelAndView salvar(@ModelAttribute("item") @Valid Usuario usuarioEnviado, BindingResult bindingResult, RedirectAttributes rediAttr) {
+		
+		if(bindingResult.hasErrors()) {
+			ModelAndView modelAndView = new ModelAndView("form-template");
+			modelAndView.addObject("papeis", papelRepo.findAll());
+			return modelAndView;
+		}
+		
 		if (usuarioEnviado.getId() != null) {
 			Optional<Usuario> optUsuario = usuarioRepo.findById(usuarioEnviado.getId());
 			if (optUsuario.isPresent()) {
-				Usuario usuario = optUsuario.get();
+				optUsuario.get();
 				usuarioEnviado = usuarioRepo.save(usuarioEnviado);
 				rediAttr.addFlashAttribute("mensagem", "Usuário atualizado com sucesso");
-				System.out.println(">>>>> Papeis" + usuarioEnviado.getPapeis());
 
 			}
 		} else {
 			usuarioEnviado.setDataCadastro(LocalDateTime.now());
 			usuarioEnviado = usuarioRepo.save(usuarioEnviado);
 			rediAttr.addFlashAttribute("mensagem", "Usuário salvo com sucesso");
-			System.out.println(">>>>> Papeis" + usuarioEnviado.getPapeis());
 
 		}
-		return "redirect:/usuario";
+		ModelAndView modelAndView = new ModelAndView("redirect:/usuario");
+		return modelAndView;
 
 	}
-//
+	
 }

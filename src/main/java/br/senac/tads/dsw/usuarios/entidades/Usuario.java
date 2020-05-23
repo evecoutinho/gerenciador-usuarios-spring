@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 
 @Entity
 public class Usuario {
@@ -20,19 +23,24 @@ public class Usuario {
 	private Integer id;
 	
 	@Column
+	@NotBlank
 	private String username;
 	
 	@Column
+	@NotBlank
 	private String nome;
 	
 	@Column
+	@NotBlank
 	private String senha;
 	
 	@Column
+	@NotBlank
 	private String status;
 	
 	@ManyToMany
 	@JoinColumn(name = "codigo_papel")
+	@NotEmpty(message = "Deve preencher ao menos uma caixa")
 	private List<Papel> papeis;
 	
 	

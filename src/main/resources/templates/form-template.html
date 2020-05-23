@@ -6,52 +6,76 @@
 <body>
 	<div layout:fragment="conteudo">
 		<h2>Adicionar usuário</h2>
-		<form method="post" th:action="@{/usuario/salvar}" th:object="${item}">
+		<form method="post" th:action="@{/usuario/salvar}" th:object="${item}"
+			novalidate>
 			<input type="hidden" name="id" th:if="*{id != null}" th:field="*{id}" />
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Username</label>
 				<div class="col-10">
-					<input type="text" class="form-control" th:field="*{username}">
-					<p class="invalid-feedback"></p>
+					<input type="text" class="form-control" th:field="*{username}"
+						th:classappend="${#fields.hasErrors('username')}? is-invalid"
+						placeholder="Digite um nome de usuário..." required>
+					<p class="invalid-feedback"
+						th:if="${#fields.hasErrors('username')}? is-invalid"
+						th:errors="*{username}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Nome Completo</label>
 				<div class="col-10">
-					<input type="text" class="form-control" th:field="*{nome}">
-					<p class="invalid-feedback"></p>
+					<input type="text" class="form-control" th:field="*{nome}"
+						th:classappend="${#fields.hasErrors('nome')}? is-invalid"
+						placeholder="Digite seu nome completo..." required>
+					<p class="invalid-feedback"
+						th:if="${#fields.hasErrors('nome')}? is-invalid"
+						th:errors="*{nome}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Senha</label>
 				<div class="col-10">
-					<input type="text" class="form-control" th:field="*{senha}">
-					<p class="invalid-feedback"></p>
+					<input type="text" class="form-control" th:field="*{senha}"
+						th:classappend="${#fields.hasErrors('senha')}? is-invalid"
+						placeholder="Escolha sua senha..." required>
+					<p class="invalid-feedback"
+						th:if="${#fields.hasErrors('senha')}? is-invalid"
+						th:errors="*{senha}"></p>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Status Ativação</label>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
-						name="inlineRadioOptions" id="ativado" th:value="Ativado" th:field="*{status}">
-						<label class="form-check-label" for="ativado">Ativado</label>
+						name="inlineRadioOptions" th:id="ativado" th:value="Ativado"
+						th:field="*{status}" th:classappend="${#fields.hasErrors('status')}? is-invalid"> 
+						<label class="form-check-label"
+						for="ativado">Ativado</label>
 				</div>
 				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" 
-					name="inlineRadioOptions" id="desativado" th:value="Desativado" th:field="*{status}"> 
-						<label class="form-check-label" for="desativado">Desativado</label>
+					<input class="form-check-input" type="radio"
+						name="inlineRadioOptions" th:id="desativado" th:value="Desativado"
+						th:field="*{status}" th:classappend="${#fields.hasErrors('status')}? is-invalid">
+						<label class="form-check-label"
+						for="desativado">Desativado</label>
 				</div>
-				<p class="invalid-feedback"></p>
+				<p class="invalid-feedback"
+						th:if="${#fields.hasErrors('status')}? is-invalid"
+						th:errors="*{status}"></p>
 			</div>
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Papéis</label>
 				<th:block th:each="papel : ${papeis}">
 					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="checkbox" th:id="|id_${papel}|" th:field="*{papeis}" th:value="${papel.id}" > 
-						<label class="form-check-label" th:for="|id_${papel}|" th:text="${papel.nome}">Admin</label>
+						<input class="form-check-input" type="checkbox"
+							th:id="|id_${papel}|" th:field="*{papeis}" th:value="${papel.id}"
+							th:classappend="${#fields.hasErrors('papeis')}? is-invalid"
+							required> <label class="form-check-label"
+							th:for="|id_${papel}|" th:text="${papel.nome}">Admin</label>
 					</div>
+					<p class="invalid-feedback"
+						th:if="${#fields.hasErrors('papeis')}? is-invalid"
+						th:errors="*{papeis}"></p>
 				</th:block>
-				<p class="invalid-feedback"></p>
 			</div>
 
 			<div class="text-center">
