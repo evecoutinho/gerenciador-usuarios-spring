@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="~{modelo}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="conteudo">
+		<h2>Gerenciador de Usuários</h2>
+		<div class="alert alert-danger" role="alert"
+			th:if="${msgErro != null}" th:text="${msgErro}"></div>
+			<div class="alert alert-success" role="alert"
+			th:if="${mensagem != null}" th:text="${mensagem}"></div>
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Nome</th>
+					<th>Status</th>
+					<th>Ações</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="item, stat : ${itens}">
+					<td th:text="${stat.count}"></td>
+					<td th:text="${item.nome}">Nome nome nome</td>
+					<td th:text="${item.status}">Status Status</td>
+					<td><a href="#" class="btn btn-primary"
+						th:href="@{/usuario/editar/{id}(id=${item.id})}">Editar</a> <a
+						href="#modalDelete" data-toggle="modal" class="btn btn-danger"
+						th:attr="data-action-url=@{usuario/remover/{id}(id=${item.id})}, data-item-id=${item.id}">Apagar</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="#" class="btn btn-success" th:href="@{/usuario/novo}">Incluir
+			Novo</a>
+		<div id="modalDelete" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<header class="modal-header">
+						<h5>Confirmar remoção</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-lable="Fechar"></button>
+						<span aria-hidden="true">X</span>
+					</header>
+					<div class="modal-body">
+						<p class="modal-message">Confirma remoção?</p>
+					</div>
+					<footer class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Não</button>
+						<form style="display: inline-block">
+							<button type="submit" class="btn btn-danger">Sim</button>
+						</form>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
