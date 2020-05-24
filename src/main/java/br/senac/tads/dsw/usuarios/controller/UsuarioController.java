@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,6 +67,7 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/salvar")
+	@Transactional
 	public ModelAndView salvar(@ModelAttribute("item") @Valid Usuario usuarioEnviado, BindingResult bindingResult,
 			RedirectAttributes rediAttr) {
 		if (bindingResult.hasErrors()) {
@@ -94,6 +96,21 @@ public class UsuarioController {
 		}
 		ModelAndView modelAndView = new ModelAndView("redirect:/usuario");
 		return modelAndView;
+	}
+
+	@PostMapping("/remover/{id}")
+	@Transactional
+	public String remover(@PathVariable("id") Integer id, RedirectAttributes rediAttr) {
+		Optional<Usuario> optUsuario = usuarioRepo.findById(id);
+		if (!optUsuario.isPresent()) {
+			rediAttr.addAttribute("mensagemError", "Usuário não encontrado");
+			return "redirect:/usuario";
+		}
+		Usuario usuario = optUsuario.get();
+		usuarioRepo.delete(usuario);
+		
+		rediAttr.addFlashAttribute("mensagem", "Usuário deletado com sucesso");
+		return "redirect:/usuario";
 	}
 
 }
