@@ -3,25 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <style>
-	 #Ativado{
-	 color: green;
-	 font-weight: bold;
-	 }
-	 
-	 #Desativado{
-	  color: red;
-	  font-weight: bold;
-	 }
+#Ativado {
+	color: green;
+	font-weight: bold;
+}
+
+#Desativado {
+	color: red;
+	font-weight: bold;
+}
 </style>
+<script>
+	$(function() {
+		$('#modalDelete').on(
+				'show.bs.modal',
+				function(event) {
+					var button = $(event.relatedTarget)
+					var actionUrl = button.data('actionUrl')
+					var itemId = button.data('itemId')
+
+					var modal = $(this)
+					modal.find('.modal-message').text(
+							'Confirma a remoção do usuário ID ' + itemId + '?')
+					modal.find('.modal-footer form').attr('action', actionUrl)
+				})
+	})
+</script>
 </head>
 <body>
 	<div layout:fragment="conteudo">
 		<h2>Gerenciador de Usuários</h2>
-			<div class="alert alert-success" role="alert" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+		<div class="alert alert-success" role="alert"
+			th:if="${mensagem != null}" th:text="${mensagem}"></div>
+		<div class="alert alert-danger" role="alert"
+			th:if="${mensagemError != null}" th:text="${mensagemError}"></div>
 		<table class="table table-striped">
 			<thead class="thead-dark">
 				<tr>
-					<th>#</th>
+					<th>ID</th>
 					<th>Nome</th>
 					<th>Status</th>
 					<th>Ações</th>
@@ -29,18 +48,21 @@
 			</thead>
 			<tbody>
 				<tr th:each="item, stat : ${itens}">
-					<td th:text="${stat.count}"></td>
+					<td th:text="${item.id}"></td>
 					<td th:text="${item.nome}">Nome nome nome</td>
-					<td th:id="${item.status}" th:text="${item.status}">Status Status</td>
+					<td th:id="${item.status}" th:text="${item.status}">Status
+						Status</td>
 					<td><a href="#" class="btn btn-primary"
-						th:href="@{/usuario/editar/{id}(id=${item.id})}">Editar</a> <a
+						th:href="@{/usuario/editar/{id}(id=${item.id})}"><i
+							class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a> <a
 						href="#modalDelete" data-toggle="modal" class="btn btn-danger"
-						th:attr="data-action-url=@{usuario/remover/{id}(id=${item.id})}, data-item-id=${item.id}">Apagar</a>
-					</td>
+						th:attr="data-action-url=@{/usuario/remover/{id}(id=${item.id})}, data-item-id=${item.id}"><i
+							class="fa fa-eraser" aria-hidden="true"></i> Apagar</a></td>
 				</tr>
 			</tbody>
 		</table>
-		<a href="#" class="btn btn-success" th:href="@{/usuario/novo}">Incluir Novo</a>
+		<a href="#" class="btn btn-success" th:href="@{/usuario/novo}"><i
+			class="fa fa-plus-square" aria-hidden="true"></i> Incluir Novo</a>
 		<div id="modalDelete" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -57,7 +79,7 @@
 						<button type="button" class="btn btn-secondary"
 							data-dismiss="modal">Não</button>
 						<form style="display: inline-block">
-							<button type="submit" class="btn btn-danger">Sim</button>
+							<button type="submit" class="btn btn-danger" data-dismiss="modal">Sim</button>
 						</form>
 					</footer>
 				</div>

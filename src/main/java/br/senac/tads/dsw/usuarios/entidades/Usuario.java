@@ -23,24 +23,24 @@ public class Usuario {
 	private Integer id;
 	
 	@Column
-	@NotBlank
+	@NotBlank(message = "O username não pode estar em branco")
 	private String username;
 	
 	@Column
-	@NotBlank
+	@NotBlank(message = "O nome não pode estar em branco")
 	private String nome;
 	
 	@Column
-	@NotBlank
+	@NotBlank(message = "A senha não pode estar em branco")
 	private String senha;
 	
 	@Column
-	@NotBlank
+	@NotBlank(message = "Um Status deve ser escolhido")
 	private String status;
 	
 	@ManyToMany
 	@JoinColumn(name = "codigo_papel")
-	@NotEmpty(message = "Deve preencher ao menos uma caixa")
+	@NotEmpty(message = "Deve marcar ao menos uma caixa")
 	private List<Papel> papeis;
 	
 	
@@ -108,6 +108,7 @@ public class Usuario {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -125,9 +126,15 @@ public class Usuario {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
 		return true;
 	}
 
+	
 	
 	
 	

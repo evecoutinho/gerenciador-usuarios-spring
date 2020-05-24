@@ -66,31 +66,34 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/salvar")
-	public ModelAndView salvar(@ModelAttribute("item") @Valid Usuario usuarioEnviado, BindingResult bindingResult, RedirectAttributes rediAttr) {
-		
-		if(bindingResult.hasErrors()) {
+	public ModelAndView salvar(@ModelAttribute("item") @Valid Usuario usuarioEnviado, BindingResult bindingResult,
+			RedirectAttributes rediAttr) {
+		if (bindingResult.hasErrors()) {
 			ModelAndView modelAndView = new ModelAndView("form-template");
 			modelAndView.addObject("papeis", papelRepo.findAll());
 			return modelAndView;
 		}
-		
+
 		if (usuarioEnviado.getId() != null) {
 			Optional<Usuario> optUsuario = usuarioRepo.findById(usuarioEnviado.getId());
 			if (optUsuario.isPresent()) {
-				optUsuario.get();
+				usuarioEnviado.setDataCadastro(LocalDateTime.now());
 				usuarioEnviado = usuarioRepo.save(usuarioEnviado);
 				rediAttr.addFlashAttribute("mensagem", "Usuário atualizado com sucesso");
-
 			}
-		} else {
+
+		} else if (usuarioRepo.existsByUsername(usuarioEnviado.getUsername()) == false) {
 			usuarioEnviado.setDataCadastro(LocalDateTime.now());
 			usuarioEnviado = usuarioRepo.save(usuarioEnviado);
-			rediAttr.addFlashAttribute("mensagem", "Usuário salvo com sucesso");
+			rediAttr.addFlashAttribute("mensagem", "Usuário cadastrado com sucesso");
 
+		} else {
+			rediAttr.addFlashAttribute("mensagemError", "username indisponível");
+			ModelAndView modelAndView = new ModelAndView("redirect:/usuario/novo");
+			return modelAndView;
 		}
 		ModelAndView modelAndView = new ModelAndView("redirect:/usuario");
 		return modelAndView;
-
 	}
-	
+
 }

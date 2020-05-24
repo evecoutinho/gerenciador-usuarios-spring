@@ -8,5 +8,7 @@ import br.senac.tads.dsw.usuarios.entidades.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	
-
+   boolean existsByUsername(String username);
+   
+   
 }

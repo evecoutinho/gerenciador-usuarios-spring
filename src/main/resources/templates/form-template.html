@@ -6,6 +6,8 @@
 <body>
 	<div layout:fragment="conteudo">
 		<h2>Adicionar usuário</h2>
+		<div class="alert alert-danger" role="alert"
+			th:if="${mensagemError != null}" th:text="${mensagemError}"></div>
 		<form method="post" th:action="@{/usuario/salvar}" th:object="${item}"
 			novalidate>
 			<input type="hidden" name="id" th:if="*{id != null}" th:field="*{id}" />
@@ -47,20 +49,22 @@
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
 						name="inlineRadioOptions" th:id="ativado" th:value="Ativado"
-						th:field="*{status}" th:classappend="${#fields.hasErrors('status')}? is-invalid"> 
-						<label class="form-check-label"
-						for="ativado">Ativado</label>
+						th:field="*{status}"
+						th:classappend="${#fields.hasErrors('status')}? is-invalid">
+					<label class="form-check-label" for="ativado">Ativado</label>
 				</div>
 				<div class="form-check form-check-inline">
 					<input class="form-check-input" type="radio"
 						name="inlineRadioOptions" th:id="desativado" th:value="Desativado"
-						th:field="*{status}" th:classappend="${#fields.hasErrors('status')}? is-invalid">
-						<label class="form-check-label"
-						for="desativado">Desativado</label>
+						th:field="*{status}"
+						th:classappend="${#fields.hasErrors('status')}? is-invalid">
+					<label class="form-check-label" for="desativado">Desativado</label>
 				</div>
-				<p class="invalid-feedback"
+				<div class="form-check form-check-inline">
+					<span class="invalid-feedback d-block"
 						th:if="${#fields.hasErrors('status')}? is-invalid"
-						th:errors="*{status}"></p>
+						th:errors="*{status}"></span>
+				</div>
 			</div>
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Papéis</label>
@@ -72,15 +76,20 @@
 							required> <label class="form-check-label"
 							th:for="|id_${papel}|" th:text="${papel.nome}">Admin</label>
 					</div>
-					<p class="invalid-feedback"
-						th:if="${#fields.hasErrors('papeis')}? is-invalid"
-						th:errors="*{papeis}"></p>
 				</th:block>
+				<div class="form-check form-check-inline">
+					<span class="invalid-feedback d-block"
+						th:if="${#fields.hasErrors('papeis')}? is-invalid"
+						th:errors="*{papeis}"></span>
+				</div>
 			</div>
 
 			<div class="text-center">
-				<a href="#" class="btn btn-warning" th:href="@{/usuario}">Cancelar</a>
-				<button type="submit" class="btn btn-success">Salvar</button>
+				<a href="#" class="btn btn-warning" th:href="@{/usuario}"><i
+					class="fa fa-ban" aria-hidden="true"></i> Cancelar</a>
+				<button type="submit" class="btn btn-success">
+					<i class="fa fa-floppy-o" aria-hidden="true"></i> Salvar
+				</button>
 			</div>
 		</form>
 	</div>
