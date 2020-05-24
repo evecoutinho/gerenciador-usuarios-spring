@@ -25,8 +25,10 @@
 			<div class="form-group row">
 				<label class="col-2 col-form-label">Nome Completo</label>
 				<div class="col-10">
-					<input type="text" class="form-control" th:field="*{nome}"
+					<input type="text" class="form-control" id="nomeCompleto"
+						th:field="*{nome}"
 						th:classappend="${#fields.hasErrors('nome')}? is-invalid"
+						onkeypress="return ApenasLetras(event,this);"
 						placeholder="Digite seu nome completo..." required>
 					<p class="invalid-feedback"
 						th:if="${#fields.hasErrors('nome')}? is-invalid"
